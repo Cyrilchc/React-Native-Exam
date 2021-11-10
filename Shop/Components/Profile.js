@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-const Products = () => {
+const Profile = () => {
 
     useEffect(() => {
     }, [])
 
     return (
         <View>
-            <Text>Tous les produits</Text>
+            <Text>Votre profil</Text>
         </View>
     )
 }
@@ -15,4 +15,4 @@ const Products = () => {
 const styles = StyleSheet.create({
 });
 
-export default Products;
+export default Profile;
