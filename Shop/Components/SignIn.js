@@ -12,7 +12,7 @@ const SignIn = ({ navigation }) => {
         auth.onAuthStateChanged(user => {
             if (user) {
                 // L'utilisateur est connecté, on le dirige vers la page des produits
-                navigation.replace("Products");
+                navigation.replace("Main");
             }
         })
     }, [])
@@ -25,7 +25,7 @@ const SignIn = ({ navigation }) => {
         setLoading(true)
         auth.signInWithEmailAndPassword(accountName, password)
             .then(() => {
-                navigation.replace("Products");
+                navigation.replace("Main");
             }).catch(err => {
                 if (err.code == "auth/internal-error") {
                     let parseError = JSON.parse(err.message)
