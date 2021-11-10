@@ -1,16 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SignIn from './Components/SignIn';
-import SignUp from './Components/SignUp';
-import Main from './Components/Main';
-import Cart from './Components/Cart';
-import Details from './Components/Details';
-import EditProfile from './Components/EditProfile';
-import History from './Components/History';
-import Orders from './Components/Orders';
+import SignIn from './Pages/SignIn';
+import SignUp from './Pages/SignUp';
+import Main from './Pages/Main';
+import Cart from './Pages/Cart';
+import Details from './Pages/Details';
+import EditProfile from './Pages/EditProfile';
+import History from './Pages/History';
+import Orders from './Pages/Orders';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
