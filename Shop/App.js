@@ -10,6 +10,7 @@ import Details from './Pages/Details';
 import EditProfile from './Pages/EditProfile';
 import History from './Pages/History';
 import Orders from './Pages/Orders';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -46,6 +47,9 @@ export default function App() {
           options={{ headerTitle: "Commandes" }}
         />
       </Stack.Navigator>
+      <Toast
+        position="bottom"
+      />
     </NavigationContainer>
   );
 }

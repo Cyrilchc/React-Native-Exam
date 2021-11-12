@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import ProductCard from '../Components/ProductCard';
 import { db } from '../firebase';
-const Products = () => {
+import { auth } from '../firebase';
+const Products = ({navigation}) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         db.collection("products").onSnapshot(products => {
-            console.log(products);
             if (products) {
                 const allProducts = []
                 products.forEach(product => {
@@ -21,10 +21,11 @@ const Products = () => {
 
     return (
         <ScrollView style={styles.container}>
+            <Text>{auth.currentUser.email}</Text>
             <View style={styles.flexRow}>
                 {
                     products.map((product, key) => (
-                        <ProductCard key={key} product={product} />
+                        <ProductCard key={key} product={product} navigation={navigation} />
                     ))
                 }
             </View>
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
     flexRow: {
         flexDirection: "row",
         flexWrap: "wrap",
+        justifyContent:"center",
     }
 });
 
