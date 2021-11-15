@@ -19,6 +19,7 @@ const Details = ({ route, navigation }) => {
         });
 
         if (singleCart) {
+            // Le panier existe déjà
             // Ajout du produit dans le tableau produits du panier
             singleCart.products.push({
                 name: product.name,
@@ -26,13 +27,42 @@ const Details = ({ route, navigation }) => {
                 price: product.price,
                 image: product.image
             })
-        }
 
-        // Met à jour en base de données
-        setLoading(true)
-        db.collection('cart').doc(singleCart.id)
-            .update({
-                products: singleCart.products
+
+            // Met à jour en base de données
+            setLoading(true)
+            db.collection('cart').doc(singleCart.id)
+                .update({
+                    products: singleCart.products
+                }).then(() => {
+                    Toast.show({
+                        type: 'success',
+                        text1: "Produit ajouté à votre panier",
+                    })
+                }).catch(err => {
+                    Toast.show({
+                        type: 'error',
+                        text1: "Une erreur est survenue",
+                        text2: err.toString()
+                    })
+                }).finally(() => {
+                    setLoading(false)
+                })
+        }
+        else {
+            // Le panier n'existe pas
+            // Créé le panier de l'utilisateur
+            let newProduct = []
+            newProduct.push({
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                image: product.image
+            })
+
+            db.collection('cart').add({
+                user: auth.currentUser.email,
+                products: newProduct
             }).then(() => {
                 Toast.show({
                     type: 'success',
@@ -47,6 +77,7 @@ const Details = ({ route, navigation }) => {
             }).finally(() => {
                 setLoading(false)
             })
+        }
     }
 
     return (
