@@ -43,10 +43,13 @@ const Cart = ({ navigation }) => {
     const order = () => {
         setLoading(true)
         // Ajoute la commande
+        let currentDateRaw = new Date()
+        let currentDate = currentDateRaw.toLocaleDateString()
         db.collection('orders').add({
             user: auth.currentUser.email,
             isDelivered: false,
             products: cart.products,
+            date: currentDate
         }).then(() => {
             Toast.show({
                 type: 'success',
@@ -57,7 +60,6 @@ const Cart = ({ navigation }) => {
             setCart([])
             
             // Supprime le panier
-            console.log(cart.id);
             db.collection('cart').doc(cart.id).delete()
                 .then(() => {
                     navigation.navigate("Products")

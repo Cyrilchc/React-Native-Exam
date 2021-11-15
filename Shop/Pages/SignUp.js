@@ -26,7 +26,6 @@ const SignUp = ({ navigation }) => {
             }).catch(err => {
                 if (err.code == "auth/internal-error") {
                     let parseError = JSON.parse(err.message)
-                    console.log(parseError);
                     setSignUpInfo(`Inscription impossible : ${parseError.error.message}`)
                 } else {
                     setSignUpInfo(`Inscription impossible : ${err.message}`)

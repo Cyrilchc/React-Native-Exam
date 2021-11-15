@@ -24,7 +24,7 @@ const Details = ({ route, navigation }) => {
             singleCart.products.push({
                 name: product.name,
                 description: product.description,
-                price: product.price,
+                price: Number(product.price),
                 image: product.image
             })
 
@@ -56,7 +56,7 @@ const Details = ({ route, navigation }) => {
             newProduct.push({
                 name: product.name,
                 description: product.description,
-                price: product.price,
+                price: Number(product.price),
                 image: product.image
             })
 
