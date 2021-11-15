@@ -11,17 +11,6 @@ const Main = ({ navigation }) => {
     const [cartList, setCartList] = useState({});
 
     useEffect(() => {
-        db.collection("cart").where("user", '==', auth.currentUser.email).onSnapshot(carts => {
-            if (carts) {
-                const allCarts = []
-                carts.forEach(cart => {
-                    allCarts.push(cart.data())
-                });
-
-                setCartList(allCarts);
-                console.log(allCarts);
-            }
-        })
     }, [])
 
     return (

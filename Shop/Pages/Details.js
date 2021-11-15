@@ -1,17 +1,52 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { auth, db } from '../firebase';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 const Details = ({ route, navigation }) => {
     const product = route.params
+    const [isLoading, setLoading] = useState(false);
     useEffect(() => {
-        console.log(product);
-
     }, [])
 
-    const addToCart = () => {
- 
+    const addToCart = async () => {
+        // Obtient le panier
+        const userCartRaw = await db.collection("cart").where("user", '==', auth.currentUser.email).get();
+        let singleCart;
+        // Récupère les data, id du panier + son contenu
+        userCartRaw.forEach(cart => {
+            singleCart = { id: cart.id, ...cart.data() }
+        });
+
+        if (singleCart) {
+            // Ajout du produit dans le tableau produits du panier
+            singleCart.products.push({
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                image: product.image
+            })
+        }
+
+        // Met à jour en base de données
+        setLoading(true)
+        db.collection('cart').doc(singleCart.id)
+            .update({
+                products: singleCart.products
+            }).then(() => {
+                Toast.show({
+                    type: 'success',
+                    text1: "Produit ajouté à votre panier",
+                })
+            }).catch(err => {
+                Toast.show({
+                    type: 'error',
+                    text1: "Une erreur est survenue",
+                    text2: err.toString()
+                })
+            }).finally(() => {
+                setLoading(false)
+            })
     }
 
     return (
@@ -26,7 +61,8 @@ const Details = ({ route, navigation }) => {
                 <Text style={styles.cardText}>{product.name}</Text>
                 <Text style={styles.cardText}>{product.description}</Text>
                 <Text style={styles.priceText}>{product.price}€</Text>
-                <TouchableOpacity onPress={() => { }} style={styles.button}>
+                {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
+                <TouchableOpacity onPress={() => { addToCart() }} style={styles.button}>
                     <Ionicons
                         name="cart-arrow-down"
                         size={20}
@@ -87,9 +123,9 @@ const styles = StyleSheet.create({
         alignSelf: "flex-end",
         flexDirection: "row",
     },
-    cartIcon:{
-        alignSelf:"center",
-        marginRight:10
+    cartIcon: {
+        alignSelf: "center",
+        marginRight: 10
     },
     buttonText: {
         color: "white",

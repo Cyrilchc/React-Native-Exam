@@ -11,9 +11,8 @@ const Products = ({navigation}) => {
             if (products) {
                 const allProducts = []
                 products.forEach(product => {
-                    allProducts.push(product.data())
+                    allProducts.push({ id: product.id, ...product.data() });
                 });
-
                 setProducts(allProducts);
             }
         })
