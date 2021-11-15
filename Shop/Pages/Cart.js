@@ -54,9 +54,7 @@ const Cart = ({ navigation }) => {
             })
             
             // Vide la panier
-            let emptyCart = cart
-            emptyCart.products = []
-            setCart(emptyCart)
+            setCart([])
             
             // Supprime le panier
             console.log(cart.id);
