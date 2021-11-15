@@ -4,7 +4,7 @@ import { db, auth } from '../firebase';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
-const Cart = () => {
+const Cart = ({ navigation }) => {
     const [isLoading, setLoading] = useState(false);
     const [cart, setCart] = useState({});
     useEffect(() => {
@@ -15,7 +15,7 @@ const Cart = () => {
                 });
             }
         })
-
+        
     }, [])
 
     const removeFromCart = (selectedProduct) => {
@@ -41,7 +41,44 @@ const Cart = () => {
     }
 
     const order = () => {
-
+        setLoading(true)
+        // Ajoute la commande
+        db.collection('orders').add({
+            user: auth.currentUser.email,
+            isDelivered: false,
+            products: cart.products,
+        }).then(() => {
+            Toast.show({
+                type: 'success',
+                text1: "Commande passée avec succès",
+            })
+            
+            // Vide la panier
+            let emptyCart = cart
+            emptyCart.products = []
+            setCart(emptyCart)
+            
+            // Supprime le panier
+            console.log(cart.id);
+            db.collection('cart').doc(cart.id).delete()
+                .then(() => {
+                    navigation.navigate("Products")
+                }).catch(err => {
+                    Toast.show({
+                        type: 'error',
+                        text1: "Une erreur est survenue",
+                        text2: err.toString()
+                    })
+                })
+        }).catch(err => {
+            Toast.show({
+                type: 'error',
+                text1: "Une erreur est survenue",
+                text2: err.toString()
+            })
+        }).finally(() => {
+            setLoading(false)
+        })
     }
 
     return (
@@ -79,7 +116,7 @@ const Cart = () => {
                         :
                         <Text style={styles.emptyText}>Votre panier est vide</Text>
                     :
-                    null
+                    <Text style={styles.emptyText}>Votre panier est vide</Text>
             }
             {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
             {
