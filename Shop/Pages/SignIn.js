@@ -29,7 +29,6 @@ const SignIn = ({ navigation }) => {
             }).catch(err => {
                 if (err.code == "auth/internal-error") {
                     let parseError = JSON.parse(err.message)
-                    console.log(parseError);
                     setAuthInfo(`Connexion impossible : ${parseError.error.message}`)
                 } else {
                     setAuthInfo(`Connexion impossible : ${err.message}`)

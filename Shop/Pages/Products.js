@@ -20,7 +20,6 @@ const Products = ({navigation}) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text>{auth.currentUser.email}</Text>
             <View style={styles.flexRow}>
                 {
                     products.map((product, key) => (
