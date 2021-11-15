@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Products from './Products';
 import Profile from './Profile';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Cart from './Cart';
-
+import { auth, db } from '../firebase';
 const Main = ({ navigation }) => {
     const Tab = createBottomTabNavigator();
+    const [cartList, setCartList] = useState({});
 
     useEffect(() => {
     }, [])

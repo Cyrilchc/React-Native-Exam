@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import { auth } from '../firebase';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 const SignUp = ({ navigation }) => {
     const [accountName, setAccountName] = useState("");
@@ -17,7 +18,13 @@ const SignUp = ({ navigation }) => {
         auth.createUserWithEmailAndPassword(accountName, password)
             .then((user) => {
                 if (user) {
-                    navigation.navigate("SignIn");
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Votre compte a été créé avec succès',
+                        //text2: 'Cliquez sur moi pour vous connecter',
+                        //onPress: navigation.navigate("SignIn") // Memory leak à cause de la redirection ?
+                    })
+                    navigation.navigate("SignIn")
                 }
             }).catch(err => {
                 if (err.code == "auth/internal-error") {
