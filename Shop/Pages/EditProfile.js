@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { auth, db } from '../firebase';
-const EditProfile = ({navigation}) => {
+const EditProfile = ({ navigation }) => {
     const [name, setName] = useState("");
     const [mail, setMail] = useState("");
     const [address, setAddress] = useState("");
@@ -15,17 +15,18 @@ const EditProfile = ({navigation}) => {
             let currentProfile;
             if (profiles) {
                 profiles.forEach(profile => {
-                    currentProfile = { id: profile.id, ...profile.data() }; 
+                    currentProfile = { id: profile.id, ...profile.data() };
                     setProfile(currentProfile)
                 });
             }
 
-            if(currentProfile){
-                setName(currentProfile.name)
+            if (currentProfile) {
                 setMail(currentProfile.email)
                 setAddress(currentProfile.address)
-                setPhoto(currentProfile.photo)
             }
+
+            setName(auth.currentUser.displayName)
+            setPhoto(auth.currentUser.photoURL)
         })
     }, [])
 
@@ -34,21 +35,43 @@ const EditProfile = ({navigation}) => {
      */
     const editProfile = () => {
         setLoading(true)
+        // Modification du profil en base
         db.collection('profiles').doc(profile.id).update({
             name: name,
             email: mail,
             address: address,
             photo: photo
         }).then(() => {
+            // Je ne redirige pas, la maj du profil utilisateur connecté
+            // reste à faire
+        }).catch(err => {
             Toast.show({
-                type: 'success',
+                type: "error",
+                text1: "Une erreur est survenue",
+                text2: err.toString()
+            })
+            return
+        }).finally(() => {
+            setLoading(false)
+        })
+
+        setLoading(true)
+        // je pourrais faire un update de l'Email mais flemme, email sensible => déconnexion après la mise à jour
+        // Comme demandé, je vais aussi modifier le profil de l'utilisateur connecté
+        auth.currentUser.updateProfile({
+            displayName: name,
+            photoURL: photo,
+        }).then(() => {
+            // Ici, je considère que le profil en base et le profil 
+            // utilisateur connecté sont tous deux mis à jour avec succès 
+            Toast.show({
+                type: "success",
                 text1: "Votre profil a été mis à jour",
             })
-
             navigation.navigate("Profile")
         }).catch(err => {
             Toast.show({
-                type: 'error',
+                type: "error",
                 text1: "Une erreur est survenue",
                 text2: err.toString()
             })

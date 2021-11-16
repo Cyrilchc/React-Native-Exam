@@ -32,8 +32,8 @@ const History = () => {
                                 });
                                 return (
                                     <View style={styles.card} key={key}>
-                                        <Text style={styles.orderNumber}>Commande n°{++key}</Text>
-                                        <Text style={styles.orderText}>Date de la commande : {order.date}</Text>
+                                        <Text style={styles.orderNumber}>Commande du {order.date}</Text>
+                                        <Text style={styles.orderText}>Commande n° : {order.id}</Text>
                                         <Text style={styles.orderText}>Nombre de produits : {order.products.length}</Text>
                                         <Text style={styles.orderText}>Total : {total} €</Text>
                                     </View>
