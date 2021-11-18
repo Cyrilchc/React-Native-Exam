@@ -12,6 +12,7 @@ const Cart = ({ navigation }) => {
             if (carts) {
                 carts.forEach(cart => {
                     setCart({ id: cart.id, ...cart.data() })
+                    console.log(cart.data());
                 });
             }
         })
@@ -101,44 +102,38 @@ const Cart = ({ navigation }) => {
     return (
         <ScrollView style={styles.container}>
             {
-                cart.products ?
-                    cart.products.length > 0 ?
-                        cart.products.map((product, key) => (
-                            <View style={styles.card} key={key}>
-                                <View style={styles.masterCardContent}>
-                                    <Image
-                                        style={styles.productImage}
-                                        source={{
-                                            uri: product.image
-                                        }}
-                                    />
-                                </View>
-                                <View style={styles.productDescription}>
-                                    <View style={styles.productDescriptionAlign}>
-                                        <Text>{product.name}</Text>
-                                        <Text>{product.price}€</Text>
+                cart.products && cart.products.length > 0 ?
+                    <View>
+                        {
+                            cart.products.map((product, key) => (
+                                <View style={styles.card} key={key}>
+                                    <View style={styles.masterCardContent}>
+                                        <Image
+                                            style={styles.productImage}
+                                            source={{
+                                                uri: product.image
+                                            }}
+                                        />
+                                    </View>
+                                    <View style={styles.productDescription}>
+                                        <View style={styles.productDescriptionAlign}>
+                                            <Text>{product.name}</Text>
+                                            <Text>{product.price}€</Text>
+                                        </View>
+                                    </View>
+                                    <View style={styles.deleteLayout}>
+                                        <TouchableOpacity style={styles.deleteButton} onPress={() => { removeFromCart(product) }}>
+                                            <Ionicons
+                                                name="delete-outline"
+                                                size={50}
+                                                color="black"
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
-                                <View style={styles.deleteLayout}>
-                                    <TouchableOpacity style={styles.deleteButton} onPress={() => { removeFromCart(product) }}>
-                                        <Ionicons
-                                            name="delete-outline"
-                                            size={50}
-                                            color="black"
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        ))
-                        :
-                        <Text style={styles.emptyText}>Votre panier est vide</Text>
-                    :
-                    <Text style={styles.emptyText}>Votre panier est vide</Text>
-            }
-            {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
-            {
-                cart.products ?
-                    cart.products.length > 0 ?
+                            ))
+                        }
+                        {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
                         <TouchableOpacity onPress={() => { order() }} style={styles.button}>
                             <Ionicons
                                 name="cart-arrow-down"
@@ -148,10 +143,9 @@ const Cart = ({ navigation }) => {
                             />
                             <Text style={styles.buttonText}>Commander</Text>
                         </TouchableOpacity>
-                        :
-                        null
+                    </View>
                     :
-                    null
+                    <Text style={styles.emptyText}>Votre panier est vide</Text>
             }
         </ScrollView>
     )
