@@ -15,9 +15,11 @@ const Cart = ({ navigation }) => {
                 });
             }
         })
-        
     }, [])
 
+    /**
+     * Retire le produit du panier
+     */
     const removeFromCart = (selectedProduct) => {
         let temp = cart.products
         let newProducts = temp.filter(e => e !== selectedProduct)
@@ -40,25 +42,26 @@ const Cart = ({ navigation }) => {
         })
     }
 
+    /**
+     * Créé la commande
+     */
     const order = () => {
         setLoading(true)
         // Ajoute la commande
-        let currentDateRaw = new Date()
-        let currentDate = currentDateRaw.toLocaleDateString()
         db.collection('orders').add({
             user: auth.currentUser.email,
             isDelivered: false,
             products: cart.products,
-            date: currentDate
+            date: getCurrentDateTime()
         }).then(() => {
             Toast.show({
                 type: 'success',
                 text1: "Commande passée avec succès",
             })
-            
+
             // Vide la panier
             setCart([])
-            
+
             // Supprime le panier
             db.collection('cart').doc(cart.id).delete()
                 .then(() => {
@@ -79,6 +82,20 @@ const Cart = ({ navigation }) => {
         }).finally(() => {
             setLoading(false)
         })
+    }
+
+    /**
+     * Obtient la date et l'heure en chaine
+     */
+    const getCurrentDateTime = () => {
+        let d = new Date();
+        let dd = String(d.getDate()).padStart(2, '0');
+        let mm = String(d.getMonth() + 1).padStart(2, '0');
+        let yyyy = d.getFullYear();
+        let hour = d.getHours();
+        let minutes = d.getMinutes();
+        d = `${dd}/${mm}/${yyyy} - ${hour}h${minutes}`;
+        return d;
     }
 
     return (
