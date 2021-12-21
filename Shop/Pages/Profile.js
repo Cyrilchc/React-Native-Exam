@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { auth, db } from '../firebase';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useSafeState } from '../Utils/useSafeState';
 
 const Profile = ({ navigation }) => {
-    const [profile, setProfile] = useState({});
-    const [isLoading, setLoading] = useState(false);
+    const [profile, setProfile] = useSafeState({});
+    const [isLoading, setLoading] = useSafeState(false);
 
     useEffect(() => {
         db.collection("profiles").where("user", '==', auth.currentUser.email).onSnapshot(profiles => {

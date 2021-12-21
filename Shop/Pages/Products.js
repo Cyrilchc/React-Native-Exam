@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import ProductCard from '../Components/ProductCard';
 import { db } from '../firebase';
-import { auth } from '../firebase';
+import { useSafeState } from '../Utils/useSafeState';
+
 const Products = ({navigation}) => {
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useSafeState([]);
 
     useEffect(() => {
         db.collection("products").onSnapshot(products => {

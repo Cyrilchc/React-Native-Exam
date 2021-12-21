@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
 import { auth } from '../firebase';
+import { useSafeState } from '../Utils/useSafeState';
 
 const SignIn = ({ navigation }) => {
-    const [accountName, setAccountName] = useState("");
-    const [password, setPassword] = useState("");
-    const [authInfo, setAuthInfo] = useState("");
-    const [isLoading, setLoading] = useState(false);
+    const [accountName, setAccountName] = useSafeState("");
+    const [password, setPassword] = useSafeState("");
+    const [authInfo, setAuthInfo] = useSafeState("");
+    const [isLoading, setLoading] = useSafeState(false);
 
     useEffect(() => {
         auth.onAuthStateChanged(user => {

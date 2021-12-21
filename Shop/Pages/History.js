@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { db, auth } from '../firebase';
+import { useSafeState } from '../Utils/useSafeState';
+
 const History = () => {
 
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useSafeState([]);
     useEffect(() => {
         let allOrders = []
         db.collection('orders').where("user", "==", auth.currentUser.email).onSnapshot(orders => {

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { db, auth } from '../firebase';
+import { useSafeState } from '../Utils/useSafeState';
+
 const Orders = () => {
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useSafeState([]);
     useEffect(() => {
         let allOrders = []
         db.collection('orders').where("user", "==", auth.currentUser.email).onSnapshot(orders => {
@@ -41,7 +43,7 @@ const Orders = () => {
                         }
                     </View>
                     :
-                    <Text style={styles.emptyText}>Aucun commande en cours</Text>
+                    <Text style={styles.emptyText}>Aucune commande en cours</Text>
             }
         </ScrollView>
     )

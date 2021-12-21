@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { auth } from '../firebase';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useSafeState } from '../Utils/useSafeState';
 
 const SignUp = ({ navigation }) => {
-    const [accountName, setAccountName] = useState("");
-    const [password, setPassword] = useState("");
-    const [signUpInfo, setSignUpInfo] = useState("");
-    const [isLoading, setLoading] = useState(false);
+    const [accountName, setAccountName] = useSafeState("");
+    const [password, setPassword] = useSafeState("");
+    const [signUpInfo, setSignUpInfo] = useSafeState("");
+    const [isLoading, setLoading] = useSafeState(false);
 
     /**
      * Fonction pour inscrire l'utilisateur

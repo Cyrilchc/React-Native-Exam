@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { db, auth } from '../firebase';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useSafeState } from '../Utils/useSafeState';
 
 const Cart = ({ navigation }) => {
-    const [isLoading, setLoading] = useState(false);
-    const [cart, setCart] = useState({});
+    const [isLoading, setLoading] = useSafeState(false);
+    const [cart, setCart] = useSafeState({});
     useEffect(() => {
         db.collection("cart").where("user", '==', auth.currentUser.email).onSnapshot(carts => {
             if (carts) {

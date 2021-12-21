@@ -1,14 +1,16 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { auth, db } from '../firebase';
+import { useSafeState } from '../Utils/useSafeState';
+
 const EditProfile = ({ navigation }) => {
-    const [name, setName] = useState("");
-    const [mail, setMail] = useState("");
-    const [address, setAddress] = useState("");
-    const [photo, setPhoto] = useState("");
-    const [profile, setProfile] = useState({});
-    const [isLoading, setLoading] = useState(false);
+    const [name, setName] = useSafeState("");
+    const [mail, setMail] = useSafeState("");
+    const [address, setAddress] = useSafeState("");
+    const [photo, setPhoto] = useSafeState("");
+    const [profile, setProfile] = useSafeState({});
+    const [isLoading, setLoading] = useSafeState(false);
 
     useEffect(() => {
         db.collection("profiles").where("user", '==', auth.currentUser.email).onSnapshot(profiles => {
